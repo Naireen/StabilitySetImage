@@ -28,8 +28,13 @@ files = ['Sys_{0}_1e8'.format(sys.argv[1])]
 
 
 for file_name in files:
+<<<<<<< HEAD
     fcpath = path + "distributions/{0}/simulation_archives/sa".format(file_name)
     df= pd.read_csv(path+"distributions/{0}/{1}.csv".format(file_name, file_name.split("_")[1] ))
+=======
+    fcpath = path + "random_distributions/{0}/simulation_archives/sa".format(file_name)
+    df= pd.read_csv(path+"random_distributions/{0}/{1}.csv".format(file_name, file_name.split("_")[1] ))
+>>>>>>> naireen/reproducibility
     df = pd.concat([df, df.apply(get_times, axis = 1)], axis = 1)
     df.to_csv("random_features/{0}1e8.csv".format(file_name.split("1e")[0] ), index = False)
     del df
