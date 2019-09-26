@@ -1,4 +1,4 @@
-Fundamental Limits From Chaos On Instability Time Predictions In Compact Planetary Systems
+# Fundamental Limits From Chaos On Instability Time Predictions In Compact Planetary Systems
 
 This repository contains the source code to reproduce the simulations and figures from Hussain & Tamayo (2019). The figure notebooks can be run directly from the csv files in the repo.
 
