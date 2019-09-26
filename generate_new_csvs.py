@@ -37,6 +37,34 @@ def collision(reb_sim, col):
     reb_sim.contents._status = 5
     return 0
 
+def es(system, Nshadows, tmax=1.e4):
+    distpath = 'hussain2019data/resonant_distributions/'
+    folder = distpath + "Res_sys_{0}_1e8/simulation_archives/".format(system)#ic{1:0=7d}.bin".format(system, 0)
+    root, dirs, files = next(os.walk(folder))
+    Nsys=0
+    for file in files:
+        try:
+            sim = rebound.SimulationArchive(folder+file)[0]
+            Nsys += 1
+        except:
+            print('Didnt load')
+    Nout = 1000
+    data = np.zeros((Nsys+1, Nout))
+    for j, file in enumerate(files[:Nshadows]):
+        sim = rebound.SimulationArchive(folder+file)[0]
+        sim.collision_resolve = collision
+        sim.exit_max_distance = 100.
+        ps = sim.particles
+        times = np.logspace(0, np.log10(tmax), Nout)
+        for i, time in enumerate(times):
+            try:
+                sim.integrate(time)
+                data[j, i] = ps[2].e
+            except:
+                break
+    data[-1,:] = times
+    return data
+
 def run(row):
     tmax = 1e7
     ID = int(row['ID'])
@@ -131,6 +159,18 @@ trappisttimes = [final_time(f) for f in binaries]
 
 trap = pd.DataFrame(np.array([binaries, trappisttimes]).T, columns=['runstring', 't'])
 trap.to_csv('csvs/trappist.csv')
+
+# generate shadow eccentricity time histories for the two sample peaked and lognormal distributions
+
+Nshadows = 50
+peakedID = 60
+lognormID = 14
+
+datapeaked = es(peakedID, Nshadows=Nshadows, tmax=2.e4)
+datalognorm = es(lognormID, Nshadows=Nshadows, tmax=1.e5)
+
+np.savetxt('csvs/peakedID_60_shadows.npy', datapeaked)
+np.savetxt('csvs/lognormID_14_shadows.npy', datalognorm)
 
 # resonanat systems
 
