@@ -1,3 +1,5 @@
+savefig.dpi : 1200
+
 legend.scatterpoints : 1 
 legend.fontsize : 16
  
